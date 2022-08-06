@@ -6,7 +6,7 @@
 /*   By: zcherrad <zcherrad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/22 18:39:30 by zcherrad          #+#    #+#             */
-/*   Updated: 2022/08/06 23:30:16 by zcherrad         ###   ########.fr       */
+/*   Updated: 2022/08/06 23:49:39 by zcherrad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,24 +20,23 @@ void     *death_checker(void *arg)
 	{
         // if (currenttime() <= thread->time_limit)
         //     printf(" currtime >>>>%ld time limits>>>%ld\n",currenttime(), thread->time_limit);
-		if (currenttime() >= thread->time_limit)
+		if (currenttime() > thread->time_limit)
 		{
 			pthread_mutex_lock(&thread->var->print_lock);
 			printf(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>%llu philosopher %d died \n",
 				currenttime() - thread->start, thread->index);
 			pthread_mutex_unlock(&thread->var->general_lock);
-            break;
             // exit(0);
-			// return(NULL);
+			return(NULL);
 		}
-		// if (thread->var->num_times_toeat != -1
-		// 	&& thread->eaten >= thread->var->num_times_toeat
-		// 	* thread->var->num_of_philos)
-		// {
-		// 	pthread_mutex_lock(&thread->var->print_lock);
-		// 	printf("End\n");
-		// 	pthread_mutex_unlock(&thread->var->general_lock);
-		// }
+		if (thread->var->num_times_toeat != -1
+			&& thread->eaten >= thread->var->num_times_toeat
+			* thread->var->num_of_philos)
+		{
+			pthread_mutex_lock(&thread->var->print_lock);
+			printf("End\n");
+			pthread_mutex_unlock(&thread->var->general_lock);
+		}
 		usleep(500);
 	}
 	return(NULL);
@@ -49,7 +48,7 @@ void    *routine(void *arg)
     pthread_t t;
     int i = 0;
     
-    pthread_create(&t, NULL, &death_checker, &thread);
+    pthread_create(&t, NULL, &death_checker, thread);
 	pthread_detach(t);
     thread->time_limit = currenttime() + thread->var->time_to_die;
     // printf(" currtime >>>>%ld time limits>>>%ld\n",currenttime(), thread->time_limit);
@@ -57,11 +56,6 @@ void    *routine(void *arg)
     // printf("teeeeeeeessssst :%d\n" , thread->index);
     while(1)
     {
-        // if (/* condition */)
-        // {
-        //     /* code */
-        // }
-        // printf("%llu time to die\n", thread->var->time_to_die);
         pthread_mutex_lock(&thread->var->fork[thread->left]);
 
         pthread_mutex_lock(&thread->var->print_lock);

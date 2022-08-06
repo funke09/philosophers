@@ -6,7 +6,7 @@
 /*   By: zcherrad <zcherrad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/19 17:42:48 by zcherrad          #+#    #+#             */
-/*   Updated: 2022/08/06 23:27:05 by zcherrad         ###   ########.fr       */
+/*   Updated: 2022/08/07 00:02:10 by zcherrad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,10 +98,10 @@ void    ft_thread(t_vars *vars)
         thread[i].var = vars;
         thread[i].index = i + 1;
     //    printf("index %d\n",thread[i].index);
-        thread[i].right = thread[i].index + 1;
         thread[i].left = thread[i].index;
-        if(thread[i].left > vars->num_of_philos)
-            thread[i].left = 1;
+        thread[i].right = thread[i].index + 1;
+        if(thread[i].right >= vars->num_of_philos)
+            thread[i].right = 0;
         pthread_create(&tid[i], NULL, &routine, &thread[i]);
         i++;
     }

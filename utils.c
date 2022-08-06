@@ -6,7 +6,7 @@
 /*   By: zcherrad <zcherrad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/22 18:31:54 by zcherrad          #+#    #+#             */
-/*   Updated: 2022/07/23 21:09:28 by zcherrad         ###   ########.fr       */
+/*   Updated: 2022/08/06 23:20:18 by zcherrad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,10 +69,10 @@ int check_char(char *str)
     return(1);
 }
 
-long	currenttime(void)
+uint64_t	currenttime(void)
 {
-	struct timeval	time;
+	static struct timeval	tv;
 
-	gettimeofday(&time, NULL);
-	return (time.tv_sec * 1000 + time.tv_usec * 0.001);
+	gettimeofday(&tv, NULL);
+	return ((tv.tv_sec * (uint64_t)1000) + (tv.tv_usec / 1000));
 }

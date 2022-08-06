@@ -6,7 +6,7 @@
 /*   By: zcherrad <zcherrad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/19 17:45:45 by zcherrad          #+#    #+#             */
-/*   Updated: 2022/07/23 23:00:42 by zcherrad         ###   ########.fr       */
+/*   Updated: 2022/08/06 23:27:52 by zcherrad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,16 +21,38 @@
 
 typedef struct s_vars
 {
-    int time_to_eat;
-    int time_to_die;
+    uint64_t time_to_eat;
+    uint64_t time_to_die;
     int num_of_philos;
-    int time_to_sleep;
+    uint64_t time_to_sleep;
     int num_times_toeat;
     pthread_mutex_t *fork;
     pthread_mutex_t	print_lock;
     pthread_mutex_t	general_lock;
+    // t_fork *forks;
+    // t_philo philos;
     
 }   t_vars;
+
+
+// typedef struct s_philo
+// {
+//     int philos_num;
+//     t_fork *fork_left;
+//     t_fork *fork_right;
+//     pthread_mutex_t fork1;
+//     pthread_mutex_t fork2;
+// }   t_philo;
+
+
+// typedef struct s_fork
+// {
+//     int is_closed;
+//     pthread_mutex_t lock_fork;
+//     int last_user;
+    
+// }   t_fork;
+
 
 typedef struct s_thread
 {
@@ -40,8 +62,8 @@ typedef struct s_thread
 	int			nmeal;
 	int			left;
 	int			right;
-	long int	start;
-	long int	end;
+	uint64_t	start;
+	uint64_t	end;
     int         eaten;
 }   t_thread;
 
@@ -55,8 +77,8 @@ int parss_args(char **av, t_vars *vars);
 
 //***** display ******//
 
-long	currenttime(void);
-void    routine(void *arg);
+uint64_t	currenttime(void);
+void    *routine(void *arg);
 
 
 #endif

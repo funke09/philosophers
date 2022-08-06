@@ -6,13 +6,13 @@
 #    By: zcherrad <zcherrad@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/07/22 18:29:19 by zcherrad          #+#    #+#              #
-#    Updated: 2022/07/29 04:50:13 by zcherrad         ###   ########.fr        #
+#    Updated: 2022/07/30 22:57:30 by zcherrad         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = philosophers
 CC = cc
-FLAGS =  -Wall -Wextra -Werror -g -fsanitize=address
+FLAGS =  -Wall -Wextra -Werror  -pthread -g -fsanitize=address
 
 HEADER = philosophers.h
 

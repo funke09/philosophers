@@ -6,7 +6,7 @@
 /*   By: zcherrad <zcherrad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/19 17:45:45 by zcherrad          #+#    #+#             */
-/*   Updated: 2022/08/06 23:27:52 by zcherrad         ###   ########.fr       */
+/*   Updated: 2022/08/09 17:09:24 by zcherrad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,35 +23,38 @@ typedef struct s_vars
 {
     uint64_t time_to_eat;
     uint64_t time_to_die;
-    int num_of_philos;
     uint64_t time_to_sleep;
+    int num_of_philos;
     int num_times_toeat;
-    pthread_mutex_t *fork;
-    pthread_mutex_t	print_lock;
-    pthread_mutex_t	general_lock;
+    // pthread_mutex_t *fork;
+    // pthread_mutex_t	print_lock;
+    // pthread_mutex_t	general_lock;
     // t_fork *forks;
     // t_philo philos;
     
 }   t_vars;
 
 
-// typedef struct s_philo
-// {
-//     int philos_num;
-//     t_fork *fork_left;
-//     t_fork *fork_right;
-//     pthread_mutex_t fork1;
-//     pthread_mutex_t fork2;
-// }   t_philo;
-
-
-// typedef struct s_fork
-// {
-//     int is_closed;
-//     pthread_mutex_t lock_fork;
-//     int last_user;
+typedef struct s_fork
+{
+    int is_closed;
+    pthread_mutex_t lock_fork;
+    int last_user;
     
-// }   t_fork;
+}   t_fork;
+
+typedef struct s_philo
+{
+    int philos_num;
+    t_fork *fork_left;
+    t_fork *fork_right;
+    int test;
+    t_vars vars;
+    // params
+    // pthread_mutex_t fork1;
+    // pthread_mutex_t fork2;
+}   t_philo;
+
 
 
 typedef struct s_thread

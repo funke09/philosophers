@@ -6,7 +6,7 @@
 /*   By: zcherrad <zcherrad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/19 17:42:48 by zcherrad          #+#    #+#             */
-/*   Updated: 2022/08/09 17:17:45 by zcherrad         ###   ########.fr       */
+/*   Updated: 2022/08/13 18:47:26 by zcherrad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,8 @@ t_fork *initialize_forks(int num_of_philos)
     // free fork
     while (i < num_of_philos)
     {
+        forks[i].is_closed = 0;
+        forks[i].last_user = 0;
         if (pthread_mutex_init(&forks[i].lock_fork, NULL))
         {
             // destroys, free
@@ -99,8 +101,16 @@ t_philo *initialize_philos(t_vars var, t_fork *forks)
     {
         philos[i].philos_num = i + 1;
         philos[i].vars = var;
-        philos[i].fork_left = &forks[i];
-        philos[i].fork_right = &forks[(i + 1) % var.num_of_philos];
+        if(i == 0) // dead_lock_solved
+        {
+            philos[i].fork_right = &forks[i];
+            philos[i].fork_left = &forks[(i + 1) % var.num_of_philos];
+        } 
+        else 
+        {
+            philos[i].fork_left = &forks[i];
+            philos[i].fork_right = &forks[(i + 1) % var.num_of_philos];
+        }
         
         i++;
     }
@@ -140,10 +150,12 @@ void    ft_thread(t_philo *philos, t_vars var)
     int i = 0;
     pthread_t *philo_threads;
     philo_threads = malloc(sizeof(pthread_t) * var.num_of_philos);
+    
     //protection
+    // printf(" num of philos %d\n", var.num_of_philos);
     while (i < var.num_of_philos)
     {
-        pthread_create(&philo_threads[i], NULL, routine, (void*)&philos[i]);
+        pthread_create(&philo_threads[i], NULL, &routine, (void*)&philos[i]);
         //protection
         
         i++;
@@ -169,12 +181,12 @@ int main(int ac, char **av)
         // protect parss_args
         init_forks = initialize_forks(vars.num_of_philos);
         init_philosophers = initialize_philos(vars, init_forks);
-        // protection
+        // protection 
         ft_thread(init_philosophers, vars);
     }
     else
      //ft_error();
-     printf("no nums of args\n");
-     printf("we out\n");
+         printf("no nums of args\n");
+    printf("we out\n");
     return (0);
 }

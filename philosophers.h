@@ -6,7 +6,7 @@
 /*   By: zcherrad <zcherrad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/19 17:45:45 by zcherrad          #+#    #+#             */
-/*   Updated: 2022/08/09 17:09:24 by zcherrad         ###   ########.fr       */
+/*   Updated: 2022/08/13 18:52:43 by zcherrad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 
 typedef struct s_vars
 {
-    uint64_t time_to_eat;
+    uint64_t time_to_eat; // int 
     uint64_t time_to_die;
     uint64_t time_to_sleep;
     int num_of_philos;

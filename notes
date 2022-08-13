@@ -1,2 +1,13 @@
+//1 -  parssing 
+//2 - initialized the forks and alocat the t_fork
+//3 - initialized the philosophers and alocat for t_philo
+//4 - created thread * (num-philosophers) 
+// 5 - should complet routin func to allow the philosophers to (takes forks(2), eating, sleeping, thinking)
+// 6 -  dont forget free and destroy
+// 7 - ...waiting for the next
+
+
+
+
 // print_mutex
 // death_watcher

@@ -101,6 +101,7 @@ t_philo *initialize_philos(t_vars var, t_fork *forks)
     {
         philos[i].philos_num = i + 1;
         philos[i].vars = var;
+        philos[i].last_time = currenttime();
         if(i == 0) // dead_lock_solved
         {
             philos[i].fork_right = &forks[i];

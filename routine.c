@@ -12,35 +12,36 @@
 
 #include "philosophers.h"
 
-// void     *death_checker(void *arg)
-// {
-//     t_thread *thread = (t_thread *)arg;
+void     *death_watcher(void *arg)
+{
+    t_philo *philo = (t_philo *)arg;
 
-//     while (1)
-// 	{
-//         // if (currenttime() <= thread->time_limit)
-//         //     printf(" currtime >>>>%ld time limits>>>%ld\n",currenttime(), thread->time_limit);
-// 		if (currenttime() > thread->time_limit)
-// 		{
-// 			pthread_mutex_lock(&thread->var->print_lock);
-// 			printf(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>%llu philosopher %d died \n",
-// 				currenttime() - thread->start, thread->index);
-// 			pthread_mutex_unlock(&thread->var->general_lock);
-//             // exit(0);
-// 			return(NULL);
-// 		}
-// 		if (thread->var->num_times_toeat != -1
-// 			&& thread->eaten >= thread->var->num_times_toeat
-// 			* thread->var->num_of_philos)
-// 		{
-// 			pthread_mutex_lock(&thread->var->print_lock);
-// 			printf("End\n");
-// 			pthread_mutex_unlock(&thread->var->general_lock);
-// 		}
-// 		usleep(500);
-// 	}
-// 	return(NULL);
-// }
+    while (1)
+	{
+         if (currenttime() <= philo->last_time)
+           printf(" %ld\n",currenttime(), philo->last_time);
+		if (ft_time(philo) == 1)
+		{
+			// pthread_mutex_lock(&philo->print_lock);
+			printf(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>%llu philosopher %d died \n",
+				currenttime() - philo->last_time, philo->philos_num);
+			// pthread_mutex_unlock(&thread->var->general_lock);
+			return(NULL);
+		}
+	}
+	return(NULL);
+}
+
+int ft_time(t_philo *philo)
+{
+    if(currenttime() - philo->last_time > philo->vars.time_to_eat 
+    || currenttime() - philo->last_time > philo->vars.time_to_sleep 
+    || currenttime() - philo->last_time > philo->vars.time_to_die 
+    ||philo->vars.num_times_toeat < 1)
+        return 1;
+    return 0;
+}
+
 void take_forks(t_philo *philo)
 {
     while(1)
@@ -69,7 +70,7 @@ void    eat(t_philo *philo)
     printf("philo %d is eating\n", philo->philos_num);
     usleep(philo->vars.time_to_eat * 1000);
 }
-void    go_to_sleep(t_philo *philo)
+void    droping_forks_and_go_to_sleep(t_philo *philo)
 {
     pthread_mutex_lock(&philo->fork_left->lock_fork);
     pthread_mutex_lock(&philo->fork_right->lock_fork);
@@ -83,7 +84,7 @@ void    go_to_sleep(t_philo *philo)
     usleep(philo->vars.time_to_sleep * 1000);
 }
 
-void    droping_forks_and_thinking(t_philo *philo)
+void    thinking(t_philo *philo)
 {  
     printf("philo %d is thinking\n", philo->philos_num);
 }
@@ -92,12 +93,15 @@ void    *routine(void *arg)
 {
     t_philo *philos_info = (t_philo*) arg;
     int i = 0;
+    pthread_t t;
+
+    pthread_create(&t, NULL, &death_watcher, (void*)&philos_info);
     while(1)
     {
         take_forks(philos_info);
         eat(philos_info);
-        go_to_sleep(philos_info);
-        droping_forks_and_thinking(philos_info);  
+        droping_forks_and_go_to_sleep(philos_info);
+        thinking(philos_info);  
     }
     // t_thread *thread = (t_thread *)arg;
     // pthread_t t;

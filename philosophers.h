@@ -48,27 +48,28 @@ typedef struct s_philo
     int philos_num;
     t_fork *fork_left;
     t_fork *fork_right;
-    int test;
+    int last_time;
+    int start;
     t_vars vars;
     // params
-    // pthread_mutex_t fork1;
+    pthread_mutex_t print_lock;
     // pthread_mutex_t fork2;
 }   t_philo;
 
 
 
-typedef struct s_thread
-{
-    t_vars  *var;
-    int			index;
-	long		time_limit;
-	int			nmeal;
-	int			left;
-	int			right;
-	uint64_t	start;
-	uint64_t	end;
-    int         eaten;
-}   t_thread;
+// typedef struct s_thread
+// {
+//     t_vars  *var;
+//     int			index;
+// 	long		time_limit;
+// 	int			nmeal;
+// 	int			left;
+// 	int			right;
+// 	uint64_t	start;
+// 	uint64_t	end;
+//     int         eaten;
+// }   t_thread;
 
 
 

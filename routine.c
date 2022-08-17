@@ -23,7 +23,7 @@ void     *death_watcher(void *arg)
 		if (ft_time(philo) == 1)
 		{
 			// pthread_mutex_lock(&philo->print_lock);
-			printf(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>%llu philosopher %d died \n",
+			printf(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>%llu philosopher %d died \n",
 				currenttime() - philo->last_time, philo->philos_num);
 			// pthread_mutex_unlock(&thread->var->general_lock);
 			return(NULL);

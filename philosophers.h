@@ -30,7 +30,7 @@ typedef struct s_vars
     // pthread_mutex_t	print_lock;
     // pthread_mutex_t	general_lock;
     // t_fork *forks;
-    // t_philo philos;
+    //  t_philo philos;
     
 }   t_vars;
 

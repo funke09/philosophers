@@ -72,7 +72,7 @@ int parss_args(char **av, t_vars *vars)
 //     pthread_mutex_init(&vars->general_lock, NULL);
 //     pthread_mutex_lock(&vars->general_lock);
 //}
-t_fork *initialize_forks(int num_of_philos)
+t_fork  *initialize_forks(int num_of_philos)
 {
     int i = 0;
     t_fork *forks;

@@ -26,11 +26,6 @@ typedef struct s_vars
     uint64_t time_to_sleep;
     int num_of_philos;
     int num_times_toeat;
-    // pthread_mutex_t *fork;
-    // pthread_mutex_t	print_lock;
-    // pthread_mutex_t	general_lock;
-    // t_fork *forks;
-    //  t_philo philos;
     
 }   t_vars;
 
@@ -51,26 +46,8 @@ typedef struct s_philo
     int last_time;
     int start;
     t_vars vars;
-    // params
     pthread_mutex_t print_lock;
-    // pthread_mutex_t fork2;
 }   t_philo;
-
-
-
-// typedef struct s_thread
-// {
-//     t_vars  *var;
-//     int			index;
-// 	long		time_limit;
-// 	int			nmeal;
-// 	int			left;
-// 	int			right;
-// 	uint64_t	start;
-// 	uint64_t	end;
-//     int         eaten;
-// }   t_thread;
-
 
 
 //******* parssing *******//
@@ -81,7 +58,7 @@ int parss_args(char **av, t_vars *vars);
 
 //***** display ******//
 
-uint64_t	currenttime(void);
+int	currenttime(void);
 void    *routine(void *arg);
 
 

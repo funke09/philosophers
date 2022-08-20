@@ -69,7 +69,7 @@ int check_char(char *str)
     return(1);
 }
 
-uint64_t	currenttime(void)
+int	currenttime(void)
 {
 	static struct timeval	tv;
 

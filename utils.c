@@ -74,5 +74,31 @@ int	currenttime(void)
 	static struct timeval	tv;
 
 	gettimeofday(&tv, NULL);
+	// printf("%lld\n currenttime", (tv.tv_sec * (uint64_t)1000) + (tv.tv_usec / 1000));
 	return ((tv.tv_sec * (uint64_t)1000) + (tv.tv_usec / 1000));
+}
+
+void	ft_error(char *str)
+{
+	int i = 0;
+	while (str[i])
+	{
+		write(2, &str[i], 1);
+		i++;
+	}
+	return;
+}
+
+void	print_lock(char *str, uint64_t time, int num_of_philo, pthread_mutex_t *mutex)
+{
+	pthread_mutex_lock(mutex);
+	printf("[%8lldms][%8d]\t\t[%8s]\n", time, num_of_philo, str);
+	pthread_mutex_unlock(mutex);	
+}
+
+void ft_usleep(int n)
+{
+	int time = currenttime();
+	while (n + time > currenttime())
+		usleep(10);	
 }

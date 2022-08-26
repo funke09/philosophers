@@ -43,10 +43,11 @@ typedef struct s_philo
     int philos_num;
     t_fork *fork_left;
     t_fork *fork_right;
-    int last_time;
-    int start;
+    uint64_t last_time;
+    uint64_t start;
     t_vars vars;
-    pthread_mutex_t print_lock;
+    int *terminate;
+    pthread_mutex_t *print_lock;
 }   t_philo;
 
 
@@ -60,6 +61,12 @@ int parss_args(char **av, t_vars *vars);
 
 int	currenttime(void);
 void    *routine(void *arg);
+void	print_lock(char *str, uint64_t time, int num_of_philo, pthread_mutex_t *mutex);
+
+//***** utils ******//
+void	ft_error(char *str);
+void ft_usleep(int n);
 
 
 #endif
+

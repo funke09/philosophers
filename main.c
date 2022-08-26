@@ -70,11 +70,19 @@ t_philo *initialize_philos(t_vars var, t_fork *forks)
     t_philo *philos = malloc(sizeof(t_philo) * var.num_of_philos);
     //protection
     int i = 0;
+    pthread_mutex_t *print_mutex = malloc(sizeof(pthread_mutex_t));
+    int *terminate =  malloc(sizeof(int));
+    *terminate = 0;
+    pthread_mutex_init(print_mutex, NULL);
+    //protection
+    int start = currenttime();
     while(i < var.num_of_philos)
     {
         philos[i].philos_num = i + 1;
         philos[i].vars = var;
-        philos[i].start = currenttime();
+        philos[i].print_lock = print_mutex;
+        philos[i].terminate = terminate;
+        philos[i].start = start;
         if(i == 0) // dead_lock_solved
         {
             philos[i].fork_right = &forks[i];
@@ -96,21 +104,21 @@ void    ft_thread(t_philo *philos, t_vars var)
     int i = 0;
     pthread_t *philo_threads;
     philo_threads = malloc(sizeof(pthread_t) * var.num_of_philos);
+    int time = currenttime(); 
     
     //protection
     while (i < var.num_of_philos)
     {
         pthread_create(&philo_threads[i], NULL, &routine, (void*)&philos[i]);
+        // pthread_detach(philo_threads[i]);
         //protection
         
         i++;
     }
+    pthread_join(philo_threads[0], NULL); 
     i = 0;
-    while (i < var.num_of_philos)
-    {
-        pthread_join(philo_threads[i], NULL);
-        i++;
-    }
+    while (!*(philos->terminate))
+        usleep(100);
     
 }
 
@@ -122,11 +130,13 @@ int main(int ac, char **av)
     
     if(ac == 5 || ac == 6)
     {
-        parss_args(av, &vars); // return error
+        parss_args(av, &vars);
+     // return error
         // protect parss_args
         init_forks = initialize_forks(vars.num_of_philos);
         init_philosophers = initialize_philos(vars, init_forks);
         // protection 
+        printf("was here\n");
         ft_thread(init_philosophers, vars);
     }
     else

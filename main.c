@@ -22,11 +22,7 @@ int parss_args(char **av, t_vars *vars)
     {
         num = ft_atoi(av[i]);
         if (num == -1 || !check_char(av[i]))
-        {
-            printf("error\n");
-            return -1;
-        }
-        //printf("%d\n",num);
+            return(-1);
         if(i == 1)
             vars->num_of_philos = num;
         else if (i == 2)
@@ -50,14 +46,18 @@ t_fork  *initialize_forks(int num_of_philos)
     int i = 0;
     t_fork *forks;
     forks = malloc(sizeof(t_fork) * num_of_philos);
-    // free fork
+    if(!forks)
+        ft_error("Error : allocation failed\n");
     while (i < num_of_philos)
     {
         forks[i].is_closed = 0;
         forks[i].last_user = 0;
-        if (pthread_mutex_init(&forks[i].lock_fork, NULL))
+        if (pthread_mutex_init(&forks[i].lock_fork, NULL) < 0)
         {
+            free(forks);
+            // pthread_attr_destroy()
             // destroys, free
+            ft_error("Error : filed to init mutex");
             return NULL;
         }  
         i++;  
@@ -68,13 +68,17 @@ t_fork  *initialize_forks(int num_of_philos)
 t_philo *initialize_philos(t_vars var, t_fork *forks)
 {
     t_philo *philos = malloc(sizeof(t_philo) * var.num_of_philos);
-    //protection
     int i = 0;
     pthread_mutex_t *print_mutex = malloc(sizeof(pthread_mutex_t));
+
+    if(!philos || !print_mutex)
+        ft_error("Error : allocation failed\n");
     int *terminate =  malloc(sizeof(int));
+    if(!terminate)
+        return(NULL);
     *terminate = 0;
-    pthread_mutex_init(print_mutex, NULL);
-    //protection
+    if(pthread_mutex_init(print_mutex, NULL) < 0)
+        ft_error("Error : failed to init mutex\n");
     int start = currenttime();
     while(i < var.num_of_philos)
     {
@@ -106,16 +110,18 @@ void    ft_thread(t_philo *philos, t_vars var)
     philo_threads = malloc(sizeof(pthread_t) * var.num_of_philos);
     int time = currenttime(); 
     
-    //protection
+    if(!philo_threads)
+        ft_error("Error : allocstion faild\n");
     while (i < var.num_of_philos)
     {
-        pthread_create(&philo_threads[i], NULL, &routine, (void*)&philos[i]);
-        // pthread_detach(philo_threads[i]);
-        //protection
-        
+        if(pthread_create(&philo_threads[i], NULL, &routine, (void*)&philos[i]) < 0)
+            ft_error("Error : failed to create thread\n");
+        if(pthread_detach(philo_threads[i]) < 0)
+            ft_error("Error : failed to detach thread\n");
         i++;
     }
-    pthread_join(philo_threads[0], NULL); 
+    if(pthread_join(philo_threads[0], NULL) < 0)
+        ft_error("Error : failed to join thread\n");
     i = 0;
     while (!*(philos->terminate))
         usleep(100);
@@ -130,18 +136,16 @@ int main(int ac, char **av)
     
     if(ac == 5 || ac == 6)
     {
-        parss_args(av, &vars);
-     // return error
-        // protect parss_args
+        if(parss_args(av, &vars) < 0)
+            ft_error("Error : !bad parameters\n");
         init_forks = initialize_forks(vars.num_of_philos);
         init_philosophers = initialize_philos(vars, init_forks);
-        // protection 
-        printf("was here\n");
+        if(!init_forks || !init_philosophers)
+            ft_error("Philosopher intialization failed.\n");
         ft_thread(init_philosophers, vars);
     }
     else
-     //ft_error();
-         printf("no nums of args\n");
+        ft_error("no nums of args\n");
     printf("we out\n");
     return (0);
 }

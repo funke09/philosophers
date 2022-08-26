@@ -86,7 +86,7 @@ void	ft_error(char *str)
 		write(2, &str[i], 1);
 		i++;
 	}
-	return;
+	exit(1);
 }
 
 void	print_lock(char *str, uint64_t time, int num_of_philo, pthread_mutex_t *mutex)

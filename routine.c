@@ -6,7 +6,7 @@
 /*   By: zcherrad <zcherrad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/22 18:39:30 by zcherrad          #+#    #+#             */
-/*   Updated: 2022/08/27 17:43:55 by zcherrad         ###   ########.fr       */
+/*   Updated: 2022/08/27 18:18:38 by zcherrad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,14 +51,16 @@ void	*routine(void *arg)
 	philos_info->last_time = currenttime();
 	if (pthread_create(&watcher, NULL, &death_watcher, (void *) philos_info))
 		ft_error("Error : death_watcher failed\n");
-	if (pthread_detach(watcher))
-		ft_error("Error : failed to detach death_watcher\n");
 	while (!*(philos_info->terminate))
 	{
+		if (philos_info->vars.num_of_philos == 1)
+			break ;
 		take_forks(philos_info);
 		eat(philos_info);
 		droping_forks_and_go_to_sleep(philos_info);
 		thinking(philos_info);
 	}
+	if (pthread_join(watcher, NULL))
+		ft_error("Error : failed to join death_watcher\n");
 	return (NULL);
 }

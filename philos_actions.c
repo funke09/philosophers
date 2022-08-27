@@ -6,7 +6,7 @@
 /*   By: zcherrad <zcherrad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/26 14:53:41 by zcherrad          #+#    #+#             */
-/*   Updated: 2022/08/27 16:38:29 by zcherrad         ###   ########.fr       */
+/*   Updated: 2022/08/27 18:09:07 by zcherrad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,18 +42,21 @@ void	take_forks(t_philo *philo)
 void	eat(t_philo *philo)
 {
 	pthread_mutex_lock(&philo->last_eat);
-	philo->last_time = currenttime();
-	pthread_mutex_unlock(&philo->last_eat);
-	print_mutex("is eating", currenttime() - philo->start, philo, 0);
-	ft_usleep(philo->vars.time_to_eat);
-	philo->meals_eaten += 1;
-	if (philo->vars.num_times_toeat != -1)
+	if (!(*philo->terminate))
 	{
-		if (philo->meals_eaten == philo->vars.num_times_toeat)
-			*(philo->are_full) += 1;
-		if (*(philo->are_full) == philo->vars.num_of_philos)
-			*(philo->terminate) = 1;
+		philo->last_time = currenttime();
+		print_mutex("is eating", currenttime() - philo->start, philo, 0);
+		ft_usleep(philo->vars.time_to_eat);
+		philo->meals_eaten += 1;
+		if (philo->vars.num_times_toeat != -1)
+		{
+			if (philo->meals_eaten == philo->vars.num_times_toeat)
+				*(philo->are_full) += 1;
+			if (*(philo->are_full) == philo->vars.num_of_philos)
+				*(philo->terminate) = 1;
+		}
 	}
+	pthread_mutex_unlock(&philo->last_eat);
 }
 
 void	droping_forks_and_go_to_sleep(t_philo *philo)

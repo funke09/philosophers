@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   routine.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zcherrad <zcherrad@student.42.fr>          +#+  +:+       +#+        */
+/*   By: macos <macos@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/22 18:39:30 by zcherrad          #+#    #+#             */
-/*   Updated: 2022/08/26 21:00:04 by zcherrad         ###   ########.fr       */
+/*   Updated: 2022/08/27 12:01:47 by macos            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,8 @@ void	*routine(void *arg)
 	philos_info->last_time = currenttime();
 	if (pthread_create(&watcher, NULL, &death_watcher, (void *) philos_info))
 		ft_error("Error : death_watcher failed\n");
-	pthread_detach(watcher);
+	if(pthread_detach(watcher))
+		ft_error("Error : failed to detach death_watcher\n");
 	while (!*(philos_info->terminate))
 	{
 		take_forks(philos_info);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philosophers.h                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zcherrad <zcherrad@student.42.fr>          +#+  +:+       +#+        */
+/*   By: macos <macos@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/19 17:45:45 by zcherrad          #+#    #+#             */
-/*   Updated: 2022/08/26 20:51:43 by zcherrad         ###   ########.fr       */
+/*   Updated: 2022/08/27 12:26:51 by macos            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,17 +55,18 @@ int		check_char(char *str);
 int		parss_args(char **av, t_vars *vars);
 
 //***** display ******//
-int		currenttime(void);
 void	take_forks(t_philo *philo);
 void	eat(t_philo *philo);
 void	droping_forks_and_go_to_sleep(t_philo *philo);
 void	thinking(t_philo *philo);
 void	*routine(void *arg);
-void	print_lock(char *str, uint64_t time, t_philo *philo);
-void	give_forks(t_philo *philo, t_fork *forks);
 
 //***** utils ******//
+int		currenttime(void);
 void	ft_error(char *str);
+void	give_forks(t_philo *philo, t_fork *forks);
+void	print_lock(char *str, uint64_t time, t_philo *philo);
+void	fill_philos(t_philo **philo, pthread_mutex_t *mutex, t_vars var, int i);
 void	ft_usleep(int n);
 int		*intallocate(void);
 #endif

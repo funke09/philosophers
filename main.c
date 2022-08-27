@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: zcherrad <zcherrad@student.42.fr>          +#+  +:+       +#+        */
+/*   By: macos <macos@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/19 17:42:48 by zcherrad          #+#    #+#             */
-/*   Updated: 2022/08/26 21:19:31 by zcherrad         ###   ########.fr       */
+/*   Updated: 2022/08/27 12:29:00 by macos            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,21 +79,15 @@ t_philo	*initialize_philos(t_vars var, t_fork *forks)
 	philos->terminate = intallocate();
 	philos->are_full = intallocate();
 	philos->start = currenttime();
-	if (pthread_mutex_init(print_mutex, NULL) != 0 || !philos \
-		|| !print_mutex || \
+	if (pthread_mutex_init(print_mutex, NULL) != 0 || !philos 
+		|| !print_mutex || 
 		!philos->terminate || !philos->are_full)
 		ft_error("Error : failed to init philosophers\n");
 	while (++i < var.num_of_philos)
 	{	
 		if (pthread_mutex_init(&philos[i].last_eat, NULL) != 0)
 			ft_error("Error : failed to init mutex");
-		philos[i].philos_num = i + 1;
-		philos[i].vars = var;
-		philos[i].print_lock = print_mutex;
-		philos[i].terminate = philos[0].terminate;
-		philos[i].start = philos[0].start;
-		philos[i].are_full = philos[0].are_full;
-		philos[i].meals_eaten = 0;
+		fill_philos(&philos, print_mutex, var, i);
 		give_forks(&philos[i], forks);
 	}
 	return (philos);
@@ -102,14 +96,12 @@ t_philo	*initialize_philos(t_vars var, t_fork *forks)
 void	ft_thread(t_philo *philos, t_vars var)
 {
 	int			i;
-	int			time;
 	pthread_t	*philo_threads;
 
 	i = 0;
-	time = currenttime();
 	philo_threads = malloc(sizeof(pthread_t) * var.num_of_philos);
 	if (!philo_threads)
-		ft_error("Error : allocstion faild\n");
+		ft_error("Error : allocation faild\n");
 	while (i < var.num_of_philos)
 	{
 		if (pthread_create(&philo_threads[i], \
@@ -119,8 +111,8 @@ void	ft_thread(t_philo *philos, t_vars var)
 			ft_error("Error : failed to detach thread\n");
 		i++;
 	}
-	if (pthread_join(philo_threads[0], NULL) < 0)
-		ft_error("Error : failed to join thread\n");
+	// if (pthread_join(philo_threads[0], NULL) == -1)
+	// 	ft_error("Error : failed to join thread\n");
 	i = 0;
 	while (!*(philos->terminate))
 		usleep(100);

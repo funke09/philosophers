@@ -3,15 +3,15 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: zcherrad <zcherrad@student.42.fr>          +#+  +:+       +#+         #
+#    By: macos <macos@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/07/22 18:29:19 by zcherrad          #+#    #+#              #
-#    Updated: 2022/08/26 21:18:48 by zcherrad         ###   ########.fr        #
+#    Updated: 2022/08/27 11:09:12 by macos            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = philosophers
-# CC = gcc
+CC = cc
 FLAGS =  -Wall -Wextra -Werror  -pthread -g -fsanitize=address
 
 HEADER = philosophers.h
@@ -24,15 +24,15 @@ OBJS = $(SRC:.c=.o)
 all : $(NAME)
 
 $(NAME) : $(OBJS)
-	$(CC) $(FLAGS) $(OBJS) -o $(NAME)
+	@$(CC) $(FLAGS) $(OBJS) -o $(NAME)
 
 %.o : %.c $(HEADER)
-	$(CC) $(FLAGS) -c $< -o $@
+	@$(CC) $(FLAGS) -c $< -o $@
 
 clean:
-	rm -rf $(OBJS) 
+	@rm -rf $(OBJS) 
 
 fclean : clean
-	rm -rf $(NAME)
+	@rm -rf $(NAME)
 	
 re : fclean all

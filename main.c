@@ -6,7 +6,7 @@
 /*   By: zcherrad <zcherrad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/19 17:42:48 by zcherrad          #+#    #+#             */
-/*   Updated: 2022/08/27 16:41:41 by zcherrad         ###   ########.fr       */
+/*   Updated: 2022/08/27 17:43:39 by zcherrad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,9 +76,9 @@ t_philo	*initialize_philos(t_vars var, t_fork *forks)
 	philos->terminate = intallocate();
 	philos->are_full = intallocate();
 	philos->start = currenttime();
-	if (pthread_mutex_init(print_lock, NULL) != 0 || !philos 
-		|| !print_lock || 
-		!philos->terminate || !philos->are_full)
+	if (pthread_mutex_init(print_lock, NULL) != 0 || !philos
+		|| !print_lock
+		|| !philos->terminate || !philos->are_full)
 		ft_error("Error : failed to init philosophers\n");
 	while (++i < var.num_of_philos)
 	{	
@@ -134,6 +134,7 @@ int	main(int ac, char **av)
 		free_resources(init_philosophers, init_forks);
 	}
 	else
-		ft_error("Error : Usage = [philosophers] [time_TD] [time_TE] [time_TS]\n");
+		ft_error("Error : Usage = [philosophers] [time_TD] \
+		[time_TE] [time_TS]\n");
 	return (0);
 }

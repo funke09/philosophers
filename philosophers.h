@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philosophers.h                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: macos <macos@student.42.fr>                +#+  +:+       +#+        */
+/*   By: zcherrad <zcherrad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/19 17:45:45 by zcherrad          #+#    #+#             */
-/*   Updated: 2022/08/27 12:26:51 by macos            ###   ########.fr       */
+/*   Updated: 2022/08/27 16:43:22 by zcherrad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ typedef struct s_philo
 	pthread_mutex_t	*print_lock;
 	pthread_mutex_t	last_eat;
 }	t_philo;
+
 //******* parssing *******//
 int		ft_atoi(const char *str);
 int		check_char(char *str);
@@ -65,8 +66,9 @@ void	*routine(void *arg);
 int		currenttime(void);
 void	ft_error(char *str);
 void	give_forks(t_philo *philo, t_fork *forks);
-void	print_lock(char *str, uint64_t time, t_philo *philo);
+void	print_mutex(char *str, uint64_t time, t_philo *philo, int status);
 void	fill_philos(t_philo **philo, pthread_mutex_t *mutex, t_vars var, int i);
 void	ft_usleep(int n);
 int		*intallocate(void);
+void	free_resources(t_philo *philo, t_fork *forks);
 #endif

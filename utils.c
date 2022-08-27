@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: macos <macos@student.42.fr>                +#+  +:+       +#+        */
+/*   By: zcherrad <zcherrad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/22 18:31:54 by zcherrad          #+#    #+#             */
-/*   Updated: 2022/08/27 12:29:08 by macos            ###   ########.fr       */
+/*   Updated: 2022/08/27 16:38:53 by zcherrad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,12 +33,16 @@ void	ft_error(char *str)
 	exit(1);
 }
 
-void	print_lock(char *str, uint64_t time, t_philo *philo)
+void	print_mutex(char *str, uint64_t time, t_philo *philo, int status_dead)
 {
+	static int	status_print;
+
+	if (status_dead == 1)
+		status_print += 1;
 	pthread_mutex_lock(philo->print_lock);
-	printf("[%8lldms][%8d]\t\t[%8s]\n", time, philo->philos_num, str);
-	if (*(philo->terminate) != 1)
-		pthread_mutex_unlock(philo->print_lock);
+	if (*(philo->terminate) != 1 || (status_print == 1 && status_dead))
+		printf("[%8lldms][%8d]\t\t[%8s]\n", time, philo->philos_num, str);
+	pthread_mutex_unlock(philo->print_lock);
 }
 
 void	ft_usleep(int n)
@@ -52,7 +56,7 @@ void	ft_usleep(int n)
 
 void	fill_philos(t_philo **philo, pthread_mutex_t *mutex, t_vars var, int i)
 {
-	t_philo *philos;
+	t_philo	*philos;
 
 	if (!philo || !*philo)
 		return ;

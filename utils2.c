@@ -6,7 +6,7 @@
 /*   By: zcherrad <zcherrad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/26 15:01:34 by zcherrad          #+#    #+#             */
-/*   Updated: 2022/08/26 20:25:15 by zcherrad         ###   ########.fr       */
+/*   Updated: 2022/08/27 16:38:14 by zcherrad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,8 @@ int	check_char(char *str)
 	int	i;
 
 	i = 0;
+	if (!str[i])
+		return (0);
 	while (str[i])
 	{
 		if (!ft_isdigit(str[i]))

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: macos <macos@student.42.fr>                +#+  +:+       +#+        */
+/*   By: zcherrad <zcherrad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/19 17:42:48 by zcherrad          #+#    #+#             */
-/*   Updated: 2022/08/27 12:29:00 by macos            ###   ########.fr       */
+/*   Updated: 2022/08/27 16:41:41 by zcherrad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int	parss_args(char **av, t_vars *vars)
 	while (av[i])
 	{
 		num = ft_atoi(av[i]);
-		if (num == -1 || !check_char(av[i]))
+		if (num < 0 || !check_char(av[i]))
 			return (-1);
 		if (i == 1)
 			vars->num_of_philos = num;
@@ -56,9 +56,6 @@ t_fork	*initialize_forks(int num_of_philos)
 		forks[i].last_user = 0;
 		if (pthread_mutex_init(&forks[i].lock_fork, NULL) < 0)
 		{
-			free(forks);
-			// pthread_attr_destroy()
-			// destroys, free
 			ft_error("Error : filed to init mutex");
 			return (NULL);
 		}
@@ -70,24 +67,24 @@ t_fork	*initialize_forks(int num_of_philos)
 t_philo	*initialize_philos(t_vars var, t_fork *forks)
 {
 	t_philo			*philos;
-	pthread_mutex_t	*print_mutex;
+	pthread_mutex_t	*print_lock;
 	int				i;
 
 	i = -1;
 	philos = malloc(sizeof(t_philo) * var.num_of_philos);
-	print_mutex = malloc(sizeof(pthread_mutex_t));
+	print_lock = malloc(sizeof(pthread_mutex_t));
 	philos->terminate = intallocate();
 	philos->are_full = intallocate();
 	philos->start = currenttime();
-	if (pthread_mutex_init(print_mutex, NULL) != 0 || !philos 
-		|| !print_mutex || 
+	if (pthread_mutex_init(print_lock, NULL) != 0 || !philos 
+		|| !print_lock || 
 		!philos->terminate || !philos->are_full)
 		ft_error("Error : failed to init philosophers\n");
 	while (++i < var.num_of_philos)
 	{	
 		if (pthread_mutex_init(&philos[i].last_eat, NULL) != 0)
 			ft_error("Error : failed to init mutex");
-		fill_philos(&philos, print_mutex, var, i);
+		fill_philos(&philos, print_lock, var, i);
 		give_forks(&philos[i], forks);
 	}
 	return (philos);
@@ -107,15 +104,16 @@ void	ft_thread(t_philo *philos, t_vars var)
 		if (pthread_create(&philo_threads[i], \
 			NULL, &routine, (void *) &philos[i]) != 0)
 			ft_error("Error : failed to create thread\n");
-		if (pthread_detach(philo_threads[i]))
-			ft_error("Error : failed to detach thread\n");
 		i++;
 	}
-	// if (pthread_join(philo_threads[0], NULL) == -1)
-	// 	ft_error("Error : failed to join thread\n");
 	i = 0;
-	while (!*(philos->terminate))
-		usleep(100);
+	while (i < var.num_of_philos)
+	{
+		if (pthread_join(philo_threads[i], NULL))
+			ft_error("Error : failed to join thread\n");
+		i++;
+	}
+	free(philo_threads);
 }
 
 int	main(int ac, char **av)
@@ -133,8 +131,9 @@ int	main(int ac, char **av)
 		if (!init_forks && !init_philosophers)
 			ft_error("Philosopher intialization failed.\n");
 		ft_thread(init_philosophers, vars);
+		free_resources(init_philosophers, init_forks);
 	}
 	else
-		ft_error("no nums of args\n");
+		ft_error("Error : Usage = [philosophers] [time_TD] [time_TE] [time_TS]\n");
 	return (0);
 }

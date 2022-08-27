@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   routine.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: macos <macos@student.42.fr>                +#+  +:+       +#+        */
+/*   By: zcherrad <zcherrad@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/07/22 18:39:30 by zcherrad          #+#    #+#             */
-/*   Updated: 2022/08/27 12:01:47 by macos            ###   ########.fr       */
+/*   Updated: 2022/08/27 16:03:36 by zcherrad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ void	*death_watcher(void *arg)
 		if (check_time(philo) == 1)
 		{
 			*(philo->terminate) = 1;
-			print_lock("is dead", currenttime() - philo->start, philo);
+			print_mutex("is dead", currenttime() - philo->start, philo, 1);
 			return (NULL);
 		}
 		usleep(100);
